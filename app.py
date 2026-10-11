@@ -23,7 +23,7 @@ from sklearn.svm import LinearSVC
 ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = Path(__file__).parent / "data" / "spam.csv"
 DB_PATH = Path(__file__).parent / "spam_history.db"
-FRONTEND_PATH = ROOT / "frontend"
+FRONTEND_PATH = ROOT
 LABELS = {
     "ham": "ham", "legitimate": "ham", "not spam": "ham", "0": "ham",
     "spam": "spam", "1": "spam",
