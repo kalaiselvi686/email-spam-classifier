@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f1">
+  <meta name="description" content="Email spam classification operations dashboard">
+  <title>Inbox Shield | Email security</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#overview" aria-label="Inbox Shield overview">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 3 27 7v8c0 7-4.6 11.7-11 14-6.4-2.3-11-7-11-14V7l11-4Z"/><path d="m11 16 3.2 3.2L21.5 12"/></svg></span>
+        <span><strong>inbox<span>shield</span></strong><small>MAIL SECURITY</small></span>
+      </a>
+
+      <div class="nav-caption">WORKSPACE</div>
+      <nav class="primary-nav">
+        <button class="nav-item active" data-view="overview" aria-label="Overview" title="Overview"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="11" width="7" height="10" rx="1"/><rect x="3" y="14" width="8" height="7" rx="1"/></svg><span>Overview</span><span class="nav-key">01</span></button>
+        <button class="nav-item" data-view="analyze" aria-label="Analyze email" title="Analyze email"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="m4 7 8 6 8-6M8 3v2m8-2v2"/></svg><span>Analyze email</span></button>
+        <button class="nav-item" data-view="history" aria-label="Scan history" title="Scan history"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/><circle cx="2.5" cy="5" r=".5"/><circle cx="2.5" cy="12" r=".5"/><circle cx="2.5" cy="19" r=".5"/></svg><span>Scan history</span><span class="count-pill" id="history-count">0</span></button>
+        <button class="nav-item" data-view="model" aria-label="Model and data" title="Model and data"><svg viewBox="0 0 24 24"><path d="M4 19V5m0 14h17"/><path d="m7 15 4-5 3 2 6-7"/><circle cx="7" cy="15" r="1"/><circle cx="11" cy="10" r="1"/><circle cx="14" cy="12" r="1"/><circle cx="20" cy="5" r="1"/></svg><span>Model & data</span></button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="health-label"><span class="status-dot"></span><span>CLASSIFIER ONLINE</span></div>
+        <div class="model-name" id="sidebar-model">Naive Bayes</div>
+        <div class="sidebar-foot"><span>LOCAL WORKSPACE</span><span>v1.0</span></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span>Workspace</span><span class="crumb-slash">/</span><strong id="breadcrumb-title">Overview</strong></div>
+        <div class="topbar-actions">
+          <span class="live-indicator"><i></i>LIVE SYSTEM</span>
+          <button class="icon-button help-button" id="refresh-button" title="Refresh dashboard" aria-label="Refresh dashboard"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9a7 7 0 0 1 11.8-2L20 12M4 12l2.6 5a7 7 0 0 0 11.8-2"/></svg></button>
+          <span class="avatar" aria-label="Local workspace">IS</span>
+        </div>
+      </header>
+
+      <section class="view active" id="view-overview" aria-labelledby="page-title">
+        <div class="page-heading">
+          <div><div class="eyebrow"><span class="eyebrow-line"></span>SECURITY OPERATIONS <span class="date-label" id="today-label"></span></div><h1 id="page-title">Good morning<span class="heading-period">.</span></h1><p class="page-subtitle">Here’s the latest from your email filter.</p></div>
+          <button class="button button-dark" data-open-view="analyze"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>New scan</button>
+        </div>
+
+        <div class="demo-note" id="demo-note"><span class="note-icon">i</span><span><strong>Demo model active.</strong> Metrics below use a small sample corpus and are not production performance estimates. Upload a labeled dataset under Model & data to train on your own data.</span><button id="dismiss-note" aria-label="Dismiss notice">×</button></div>
+
+        <div class="kpi-grid">
+          <article class="kpi"><div class="kpi-top"><span>TOTAL SCANNED</span><span class="kpi-symbol symbol-ink"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="m4 7 8 6 8-6"/></svg></span></div><div class="kpi-value" id="total-scans">0</div><div class="kpi-foot"><span class="kpi-foot-mark">↗</span><span id="today-scans">0 today</span><span class="muted">· all time</span></div></article>
+          <article class="kpi"><div class="kpi-top"><span>SPAM CAUGHT</span><span class="kpi-symbol symbol-coral"><svg viewBox="0 0 24 24"><path d="M12 3 22 21H2L12 3Z"/><path d="M12 9v5m0 3h.01"/></svg></span></div><div class="kpi-value" id="spam-count">0</div><div class="kpi-foot"><span class="status-chip chip-spam">BLOCKED</span><span class="muted">flagged as spam</span></div></article>
+          <article class="kpi"><div class="kpi-top"><span>LEGITIMATE</span><span class="kpi-symbol symbol-mint"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/><circle cx="12" cy="12" r="10"/></svg></span></div><div class="kpi-value" id="ham-count">0</div><div class="kpi-foot"><span class="status-chip chip-ham">DELIVERED</span><span class="muted">classified as ham</span></div></article>
+          <article class="kpi"><div class="kpi-top"><span>PHISHING ALERTS</span><span class="kpi-symbol symbol-amber"><svg viewBox="0 0 24 24"><path d="M12 3 22 21H2L12 3Z"/><path d="M12 9v5m0 3h.01"/></svg></span></div><div class="kpi-value" id="phishing-count">0</div><div class="kpi-foot"><span class="status-chip chip-phishing">HIGH RISK</span><span class="muted">credential lures</span></div></article>
+          <article class="kpi kpi-rate"><div class="kpi-top"><span>SPAM RATE</span><span class="kpi-symbol symbol-teal"><svg viewBox="0 0 24 24"><path d="M4 19V5m0 14h17"/><path d="m7 15 4-5 3 2 6-7"/></svg></span></div><div class="kpi-value"><span id="spam-rate">0</span><small>%</small></div><div class="kpi-foot"><span class="muted">of all classified emails</span></div></article>
+        </div>
+
+        <div class="overview-grid">
+          <section class="panel volume-panel">
+            <div class="panel-heading"><div><div class="section-kicker">ACTIVITY</div><h2>Scan volume</h2></div><div class="chart-legend"><span><i class="legend-spam"></i>Spam</span><span><i class="legend-ham"></i>Ham</span><span><i class="legend-phishing"></i>Phishing</span></div></div>
+            <div class="chart-summary"><strong id="week-scans">0</strong><span>emails this week</span></div>
+            <div class="volume-chart" id="volume-chart" role="img" aria-label="Daily scan volume over the last seven days"></div>
+          </section>
+          <section class="panel distribution-panel">
+            <div class="panel-heading"><div><div class="section-kicker">CLASSIFICATION</div><h2>Inbox mix</h2></div><button class="text-button" data-open-view="history">View history <span>→</span></button></div>
+            <div class="mix-content"><div class="donut" id="mix-donut"><div class="donut-hole"><strong id="mix-total">0</strong><span>SCANS</span></div></div><div class="mix-legend"><div><span class="mix-dot dot-spam"></span><span>Spam</span><strong id="mix-spam">0</strong></div><div><span class="mix-dot dot-ham"></span><span>Ham</span><strong id="mix-ham">0</strong></div><div><span class="mix-dot dot-phishing"></span><span>Phishing</span><strong id="mix-phishing">0</strong></div><div class="mix-divider"></div><div class="mix-total"><span>Spam rate</span><strong id="mix-rate">0%</strong></div></div></div>
+            <div class="mix-foot"><span class="status-dot"></span>Predictions are stored locally</div>
+          </section>
+        </div>
+
+        <section class="panel recent-panel">
+          <div class="panel-heading"><div><div class="section-kicker">LATEST ACTIVITY</div><h2>Recent detections</h2></div><button class="text-button" data-open-view="history">Full history <span>→</span></button></div>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>CLASSIFICATION</th><th>EMAIL PREVIEW</th><th>KEY SIGNALS</th><th>CONFIDENCE</th><th>TIME</th></tr></thead><tbody id="recent-rows"></tbody></table><div class="empty-state" id="recent-empty">Nothing scanned yet. Analyze an email to see detections here.</div></div>
+        </section>
+        <footer class="page-footer"><span>INBOX SHIELD <span class="footer-dot">·</span> LOCAL EMAIL CLASSIFIER</span><span>MODEL <strong id="footer-model">NAIVE BAYES</strong></span></footer>
+      </section>
+
+      <section class="view" id="view-analyze" aria-labelledby="analyze-title">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span>MESSAGE INSPECTION</div><h1 id="analyze-title">Analyze an email<span class="heading-period">.</span></h1><p class="page-subtitle">Run a message through the active classifier and inspect its strongest signals.</p></div></div>
+        <div class="analysis-layout">
+          <section class="panel analyze-panel"><div class="panel-heading"><div><div class="section-kicker">NEW CLASSIFICATION</div><h2>Message details</h2></div><span class="panel-step">01 <span>/</span> 01</span></div>
+            <form id="analyze-form"><label class="field-label" for="sender-input">SENDER <span>OPTIONAL</span></label><input id="sender-input" class="text-input" type="email" maxlength="254" placeholder="sender@example.com"><label class="field-label message-label" for="email-input">EMAIL CONTENT <span id="char-count">0 / 50,000</span></label><textarea id="email-input" class="message-input" minlength="10" maxlength="50000" required placeholder="Paste the email subject and body here..."></textarea><div class="form-foot"><span class="privacy-note"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Processed locally. Content is not sent to a third party.</span><button class="button button-dark" id="analyze-submit" type="submit"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5M10.8 7v7.6m-3.8-3.8h7.6"/></svg>Classify email</button></div></form>
+            <div class="example-row"><span>TRY AN EXAMPLE</span><button class="example-chip" data-example="spam">Suspicious offer</button><button class="example-chip" data-example="phishing">Account alert</button><button class="example-chip" data-example="ham">Meeting note</button></div>
+          </section>
+          <section class="panel result-panel" id="result-panel"><div class="panel-heading"><div><div class="section-kicker">ANALYSIS RESULT</div><h2>Classification</h2></div><span class="result-live"><i></i>READY</span></div><div class="result-placeholder" id="result-placeholder"><div class="scan-illustration"><svg viewBox="0 0 72 72"><rect x="10" y="15" width="52" height="42" rx="3"/><path d="m10 19 26 19 26-19M20 10h32"/><path d="M26 48h20"/></svg><span class="scan-ray"></span></div><strong>Ready when you are</strong><p>Submit an email to see its classification, confidence, and the terms that influenced the result.</p></div><div class="result-output" id="result-output" hidden></div></section>
+        </div>
+        <footer class="page-footer"><span>INBOX SHIELD <span class="footer-dot">·</span> LIVE CLASSIFICATION</span><span>DECISION <strong>HIGHEST CLASS PROBABILITY</strong></span></footer>
+      </section>
+
+      <section class="view" id="view-history" aria-labelledby="history-title">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span>MESSAGE ARCHIVE</div><h1 id="history-title">Scan history<span class="heading-period">.</span></h1><p class="page-subtitle">Every classification run in this local workspace.</p></div><button class="button button-dark" data-open-view="analyze"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>New scan</button></div>
+        <section class="panel history-panel"><div class="history-toolbar"><div class="history-title-group"><div class="section-kicker">ALL CLASSIFICATIONS</div><h2><span id="history-total">0</span> records</h2></div><div class="filter-controls"><label class="search-control"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="history-search" type="search" placeholder="Search sender or email"></label><select id="history-filter" aria-label="Filter by classification"><option value="all">All types</option><option value="spam">Spam only</option><option value="ham">Ham only</option><option value="phishing">Phishing only</option></select></div></div><div class="table-wrap"><table class="data-table history-table"><thead><tr><th>CLASSIFICATION</th><th>SENDER</th><th>EMAIL PREVIEW</th><th>KEY SIGNALS</th><th>CONFIDENCE</th><th>TIME</th></tr></thead><tbody id="history-rows"></tbody></table><div class="empty-state" id="history-empty">No matching scans. Analyze an email to start your history.</div></div></section>
+        <footer class="page-footer"><span>INBOX SHIELD <span class="footer-dot">·</span> SCAN HISTORY</span><span>RETENTION <strong>LOCAL SQLITE</strong></span></footer>
+      </section>
+
+      <section class="view" id="view-model" aria-labelledby="model-title">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span>MODEL WORKBENCH</div><h1 id="model-title">Model & data<span class="heading-period">.</span></h1><p class="page-subtitle">Evaluation metrics and training data for the active classifier.</p></div></div>
+        <div class="model-banner" id="model-banner"><span class="model-banner-mark">!</span><div><strong>Demo model is not validated for production.</strong><span>Its small, hand-curated sample is only here to make the prototype run. Train with a representative labeled dataset before relying on its predictions.</span></div></div>
+        <div class="model-metrics" id="model-metrics"></div>
+        <div class="model-grid">
+          <section class="panel confusion-panel"><div class="panel-heading"><div><div class="section-kicker">ERROR ANALYSIS</div><h2>Confusion matrix</h2></div><span class="matrix-key">ACTUAL × PREDICTED</span></div><div id="confusion-matrix" class="matrix-wrap"></div><p class="matrix-caption">Rows are actual classes and columns are predictions. Off-diagonal counts show which messages were confused with another class.</p><div class="class-report-wrap"><div class="section-kicker">PER-CLASS PERFORMANCE</div><table class="class-report"><thead><tr><th>CLASS</th><th>PRECISION</th><th>RECALL</th><th>F1</th></tr></thead><tbody id="class-report"></tbody></table></div></section>
+          <section class="panel train-panel"><div class="panel-heading"><div><div class="section-kicker">RETRAIN MODEL</div><h2>Use your dataset</h2></div><span class="upload-mark"><svg viewBox="0 0 24 24"><path d="M12 16V4m-5 5 5-5 5 5M4 15v5h16v-5"/></svg></span></div><p class="train-copy">Upload a labeled CSV to replace the demo corpus and train a fresh model with a fixed 75/25 train-test split.</p><form id="dataset-form"><label class="field-label" for="model-select">ALGORITHM</label><select class="text-input select-input" id="model-select"><option value="naive_bayes">Multinomial Naive Bayes</option><option value="logistic_regression">Logistic Regression</option><option value="linear_svm">Linear SVM</option></select><label class="field-label upload-label" for="dataset-file">LABELED CSV</label><input id="dataset-file" class="file-input" type="file" accept=".csv,.txt" required><div class="dataset-hint">Recognized columns: <code>label</code> + <code>text</code>, or UCI <code>v1</code> + <code>v2</code>. Labels: ham, spam, phishing (or 0, 1, 2).</div><button class="button button-dark train-button" type="submit" id="train-submit"><svg viewBox="0 0 24 24"><path d="M12 16V4m-5 5 5-5 5 5M4 15v5h16v-5"/></svg>Upload & train</button></form><div class="train-message" id="train-message" role="status"></div></section>
+        </div>
+        <footer class="page-footer"><span>INBOX SHIELD <span class="footer-dot">·</span> MODEL EVALUATION</span><span>ACTIVE DATASET <strong id="dataset-name">DEMO SAMPLE</strong></span></footer>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
