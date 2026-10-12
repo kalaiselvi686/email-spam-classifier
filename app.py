@@ -20,9 +20,9 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import LinearSVC
 
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA_PATH = Path(__file__).parent / "data" / "spam.csv"
-DB_PATH = Path(__file__).parent / "spam_history.db"
+ROOT = Path(__file__).resolve().parent
+DATA_PATH = ROOT / "spam.csv"
+DB_PATH = ROOT / "spam_history.db"
 FRONTEND_PATH = ROOT
 LABELS = {
     "ham": "ham", "legitimate": "ham", "not spam": "ham", "0": "ham",
